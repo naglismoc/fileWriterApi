@@ -1,8 +1,12 @@
 package org.example;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
     private long id;
+    @SerializedName("first_name")
     private String firstName;
+    @SerializedName("last_name")
     private String lastName;
     private String avatar;
     private String email;

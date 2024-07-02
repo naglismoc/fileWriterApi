@@ -2,11 +2,14 @@ package org.example;
 
 import com.google.gson.*;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static Gson gson;
@@ -18,8 +21,47 @@ public class Main {
 //        List<User> users = getUsers();//        System.out.println(users);
       //  User user = getUser(1);
 //        updateUser(u);
-        deleteUser(u2);
+//        deleteUser(u2);
+        API();
+//        System.out.println(new Place());
+        Scanner sc = new Scanner(System.in);
+    //  uzd1 istraukti miesta is API, sukonstruoti jo java objektą ir atspausdinti consolėje su .toString();
+        System.out.println("Pasirinkite miestą ir jo orus kuriuos norite matyti");
+        String city = sc.nextLine();
+        String url = "https://api.meteo.lt/v1/places/" + city ;
+
+    //  uzd2 pagal įvestą miestą surasti:
+        //  patį miestą, (iš jo atvaizduosime "administrativeDivision")
+        //  jo dabartinius orus, sukonstruoti forecastTimestamp objektų masyvą ir savo nuožiūra
+        // gražiai ir aiškiai atvaizduoti.
+
+         url = "https://api.meteo.lt/v1/places/" + city + "/forcasts/long-term";
+
+
     }
+
+    private static void API() {
+        try {
+            URL url = new URL("https://reqres.in/api/users");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+            String response = "";
+            String line;
+            while (( line = reader.readLine()) != null){
+                response += line;
+            }
+            JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+            JsonArray usersArray = jsonResponse.getAsJsonArray("data");
+            User[] users = gson.fromJson(usersArray, User[].class);
+            System.out.println(users);
+
+            reader.close();
+        } catch (Exception e) {
+        }
+    }
+
     public static void deleteUser(User user){
         List<User> users = getUsers();
         users.stream()
